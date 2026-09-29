@@ -40,7 +40,7 @@ For a deeper understanding of the tradecraft, methodology, and the "why" behind 
 ## 📋 Prerequisites
 
 To render the visual hierarchy, ensure the following search command is available in your Splunk environment:
-* **[pstree Custom Search Command](https://splunkbase.splunk.com/)** (available via Splunkbase).
+* **[pstree Custom Search Command](https://splunkbase.splunk.com/app/5721)** (available via Splunkbase).
 
 ---
 
