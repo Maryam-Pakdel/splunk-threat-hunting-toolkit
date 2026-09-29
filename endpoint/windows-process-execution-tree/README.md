@@ -33,6 +33,17 @@ During alert triage and DFIR investigations, analysts need to see the entire exe
 
 ---
 
+## 🎯 MITRE ATT&CK Coverage
+
+| Tactic | Technique ID | Technique Name | Detection Context |
+| :--- | :--- | :--- | :--- |
+| **Execution** | [T1059](https://attack.mitre.org/techniques/T1059/) | Command and Scripting Interpreter | PowerShell, CMD, WScript execution tracking |
+| **Defense Evasion** | [T1036](https://attack.mitre.org/techniques/T1036/) | Masquerading | Renamed binaries via `OriginalFileName` validation |
+| **Defense Evasion** | [T1027](https://attack.mitre.org/techniques/T1027/) | Obfuscated Files or Information | Base64/encoded arguments exposed in `CommandLine` |
+| **Persistence / Privilege Escalation** | [T1543](https://attack.mitre.org/techniques/T1543/) | Create or Modify System Process | Services spawning unexpected parentage |
+
+---
+
 ## 📚 Recommended Reading
 
 For a deeper understanding of the tradecraft, methodology, and the "why" behind process tree analysis:
