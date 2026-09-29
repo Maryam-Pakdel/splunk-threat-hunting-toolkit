@@ -37,6 +37,20 @@ For a deeper understanding of the tradecraft, methodology, and the "why" behind 
 
 ---
 
+### 🧠 Logic Breakdown: `process_tree.spl`
+
+This section details the internal mechanics of the `process_tree.spl` query, broken down by its operational phases:
+
+1. **Data Ingestion & Filtering**: Merges Windows Security EventCode `4688` and Sysmon EventCode `1` logs, while explicitly filtering out `splunkd.exe` to reduce noise.
+2. **Dynamic Token Processing**: Utilizes `match` and `replace` functions to parse the `$TOKEN_PROCESS_PATH$` and `$TOKEN_PROCESS_ID$` inputs. This allows for wildcard-supported regex matching, ensuring flexibility during investigations.
+3. **PID Normalization**: Converts hexadecimal PIDs (common in `4688`) to decimal format using `tonumber(..., 16)`. This aligns the dataset, enabling successful parent-child relationship correlation across different log sources.
+4. **Field Normalization & Enrichment**:
+    * Standardizes `CommandLine` arguments by coalescing multiple potential field names.
+    * Uses `rex` and `OriginalFileName` checks to extract clean executable names, mitigating defense evasion techniques involving renamed binaries.
+5. **Hierarchy Rendering**: Prepares the data by constructing `parent` and `child` strings (containing PID and Name), then passes them to the `pstree` command to generate the final hierarchical visualization.
+
+---
+
 ## 📋 Prerequisites
 
 To render the visual hierarchy, ensure the following search command is available in your Splunk environment:
