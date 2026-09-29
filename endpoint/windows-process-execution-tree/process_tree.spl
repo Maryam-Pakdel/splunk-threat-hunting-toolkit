@@ -1,1 +1,30 @@
-
+(index=windows EventCode=4688) OR (index=sysmon EventCode=1)
+host=APAMLAKTEHRAN61
+parent_process_name!="*splunkd.exe*"
+| where match(replace(process_path, "\s+", ""), "(?i)" . replace(replace(replace("*", "\s+", ""), "\*", ".*"), "\\\\", "\\\\\\\\"))
+| where match(tostring(tonumber(replace(process_id, "\s+", ""), 16)), replace(replace("160356", "\s+", ""), "\*", ".*"))
+| eval ParentImage=parent_process_name,
+       Image=process_name,
+       ParentProcessId=tonumber(parent_process_id, 16),
+       ProcessId=tonumber(process_id, 16),
+       User=user,
+       CommandLine=coalesce(CommandLine, Process_Command_Line, "<CommandLine Unavailable>")
+| rex field=ParentImage "(?<ParentName>[^\x5c]+)$"
+| rex field=Image "(?<ProcessName>[^\x5c]+)$"
+| eval ProcessName=if(isnull(OriginalFileName) OR OriginalFileName="-", ProcessName, OriginalFileName)
+| eval ParentName=lower(coalesce(ParentName, "Unknown_Parent")),
+       ProcessName=lower(coalesce(ProcessName, "Unknown_Process"))
+| stats max(_time) as _time, values(ParentName) as ParentName, values(ProcessName) as ProcessName, values(User) as User, values(EventCode) as EventCode by host, CommandLine, ParentProcessId, ProcessId
+| sort 0 _time
+| eval EventCode=coalesce(mvjoin(EventCode, ","), "N/A"),
+       User=coalesce(mvjoin(User, " / "), "Unknown_User"),
+       ParentName=coalesce(mvjoin(ParentName, " / "), "Unknown_Parent"),
+       ProcessName=coalesce(mvjoin(ProcessName, " / "), "Unknown_Process")
+| eval parent=ParentName." (PID: ".ParentProcessId.")",
+       child=ProcessName." (PID: ".ProcessId.")"
+| eval time_str=if(isnotnull(_time), strftime(_time, "%Y-%m-%d %H:%M:%S"), "No_Time")
+| eval detail=time_str." (EventID ".EventCode.") (User: ".User.") ".coalesce(CommandLine, "-")
+| where isnotnull(parent) AND isnotnull(child) AND isnotnull(detail)
+| fields parent child detail
+| pstree child=child parent=parent detail=detail spaces=60
+| table tree
