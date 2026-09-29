@@ -36,38 +36,38 @@ For a deeper understanding of the tradecraft, methodology, and the "why" behind 
 4. **Visual Hierarchy**: Utilizes the `pstree` custom command to render structured tree branches directly in a dashboard table.
 
 ---
-### 🧠 Technical Deep Dive: `process_tree.spl` Logic
+## 🧠 Technical Deep Dive: `process_tree.spl` Logic
 
 This section provides a granular breakdown of the SPL execution pipeline to assist analysts in debugging or extending the query.
 
-#### 1. Data Ingestion & Noise Suppression
+### 1. Data Ingestion & Noise Suppression
 The query begins by aggregating process creation events from two primary telemetry sources:
 *   **EventCode 4688**: Native Windows Security Auditing.
 *   **EventCode 1**: Microsoft Sysmon.
 *   **Exclusion Layer**: A mandatory filter `parent_process_name!="*splunkd.exe*"` is applied early in the pipeline to prevent the search from being flooded by Splunk’s internal agent activity, ensuring only relevant system/user activity is analyzed.
 
-#### 2. Advanced Regex Token Handling
+### 2. Advanced Regex Token Handling
 Unlike standard Splunk filters, this query implements a sophisticated **Dynamic Regex Translation** for the input tokens (`$TOKEN_PROCESS_PATH$` and `$TOKEN_PROCESS_ID$`):
 *   **Wildcard Support**: It uses `replace(..., "\*", ".*")` to convert standard user wildcards (`*`) into Regex-compatible patterns.
 *   **Escaping**: It handles Windows backslashes by escaping them (`\\\\` to `\\\\\\\\`) and removes whitespace to ensure the `match()` function doesn't fail due to formatting issues.
 *   **Case Insensitivity**: The `(?i)` flag is prepended to the pattern, making the search case-insensitive for file paths.
 
-#### 3. PID & Field Normalization (The Multi-Source Bridge)
+### 3. PID & Field Normalization (The Multi-Source Bridge)
 One of the core challenges in process tracing is the discrepancy between log formats:
 *   **Hex-to-Dec Conversion**: Windows logs PIDs in Hex (e.g., `0x1a4`), while Sysmon and user inputs are typically Decimal. The query uses `tonumber(process_id, 16)` to normalize all PIDs to Decimal integers, enabling accurate `stats` grouping and parent-child matching.
 *   **Command Line Coalescing**: Since Windows and Sysmon use different field names (`Process_Command_Line` vs `CommandLine`), the `coalesce()` function ensures the query captures the command-line arguments regardless of the log source.
 
-#### 4. Forensic Enrichment & Masquerading Detection
+### 4. Forensic Enrichment & Masquerading Detection
 The query goes beyond simple logging by adding defensive logic:
 *   **Binary Identification**: Using `rex`, it strips the full path to isolate the executable name (`ProcessName`).
 *   **Masquerading Check**: It evaluates the `OriginalFileName` field (from Sysmon). If a malicious actor renames `powershell.exe` to `calc.exe`, the query detects this by prioritizing the `OriginalFileName` over the reported `ProcessName`, exposing the attempt at defense evasion.
 
-#### 5. Data Aggregation & Multi-Value Management
+### 5. Data Aggregation & Multi-Value Management
 Since a single process execution might be captured by both Windows and Sysmon, the query uses `stats` to deduplicate:
 *   **Timeline Preservation**: `max(_time)` captures the latest activity timestamp.
 *   **Multi-Value Joining**: `mvjoin(EventCode, ",")` and `mvjoin(User, " / ")` ensure that if multiple sources report different users or event IDs for the same PID, the information is concatenated rather than overwritten.
 
-#### 6. Recursive Tree Reconstruction
+### 6. Recursive Tree Reconstruction
 The final stage prepares the data for the `pstree` visualization:
 *   **Node Construction**: It builds unique strings for `parent` and `child` by concatenating the process name with its normalized PID (e.g., `cmd.exe (PID: 4432)`).
 *   **Contextual Details**: The `detail` field is enriched with the timestamp, Event ID, and the full command line.
