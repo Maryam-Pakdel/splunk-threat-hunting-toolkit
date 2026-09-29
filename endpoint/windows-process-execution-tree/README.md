@@ -105,4 +105,58 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
    * Displays the grand parent process to identify the root execution source (e.g., service, shell, or malicious launcher).
 
 
+---
+
+## Repository Structure
+
+* `process_tree.spl`: Primary SPL query for building recursive process trees using Sysmon EventCode 1.
+* `sysmon-process.xml`: Initial triage panel. Filter by host, path, or PID to locate target executions.
+* `sysmon-parent.xml`: Upstream panel. Resolves direct parent context via clicked target token.
+* `sysmon-grand-parent.xml`: Root discovery panel. Traces ancestry back to initial launcher processes.
+* `sysmon-child.xml`: Downstream panel. Lists all spawned subprocesses and downstream payload drops.
+
+---
+
+## Prerequisites and Dependencies
+
+* **Splunk Environment**: Designed and tested for Splunk Enterprise using Classic (Simple XML) dashboards.
+* **Add-on for Process Trees**:
+  * The query inside `process_tree.spl` relies on the custom Splunk command `pstree`.
+  * Download and install the app from Splunkbase: [Process Tree App (App 5721)](https://splunkbase.splunk.com/app/5721).
+* **Native Drilldown Panels**: The 4 XML drilldown panels require **no custom add-ons**; they operate entirely on native Splunk search commands.
+* **Data Sources**:
+  * Sysmon Event ID 1 (Process Creation).
+  * Recommended fields: `Host`, `ProcessId`, `ProcessGuid`, `ParentProcessId`, `ParentProcessGuid`, `Image`, `CommandLine`.
+
+---
+
+## Dashboard Inputs Configuration
+
+Ensure your dashboard header form contains the following inputs:
+
+* `time`: Time Range Picker (Default: Last 1 hour).
+* `TOKEN_HOST`: Text input mapping to target host / workstation (Default: `*`).
+* `TOKEN_PROCESS_PATH`: Text input for filtering executable names or path patterns (Default: `*`).
+* `TOKEN_PROCESS_ID`: Text input for filtering by numerical Process ID (Default: `*`).
+* `TOKEN_PROCESS_GUID`: Text input for filtering by Sysmon GUID (Default: `*`).
+
+---
+
+## Deployment & Setup
+
+1. **Create Dashboard**:
+   * Navigate to **Search & Reporting** -> **Dashboards** -> **Create New Dashboard**.
+   * Title the dashboard (e.g., `Sysmon Process Investigation Toolkit`).
+   * Select **Classic Dashboards** as the layout engine.
+
+2. **Configure XML Source**:
+   * Click **Edit**, then select **Edit Source** to access the Simple XML definition.
+   * Paste the input configuration tags and the panel definitions from the respective `.xml` files in this repository.
+
+3. **Install Visual Tree View**:
+   * Create a new single panel and paste the search query from `process_tree.spl`.
+   * Set visualization to Table or custom view supported by the `pstree` app.
+
+4. **Verify Field Mappings**:
+   * Confirm that your index/sourcetype matches the queries (adjust `index=* sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"` to your organization's naming convention).
 
