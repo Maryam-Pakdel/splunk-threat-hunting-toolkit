@@ -13,6 +13,12 @@ During alert triage and DFIR investigations, analysts need to see the entire exe
 
 ---
 
+## 📚 Recommended Reading
+For a deeper understanding of the tradecraft, methodology, and the "why" behind process tree analysis, I highly recommend reading:
+* **[Process Hunting with a Process Tree](https://www.splunk.com/en-us/blog/security/process-hunting-with-a-process.html)** - An insightful Splunk blog post that explores the value of process lineage visibility in SOC operations and how it elevates threat hunting capabilities.
+
+---
+
 ## ⚙️ Data Sources & Event IDs
 
 | Data Source | EventCode | Key Ingested Fields |
@@ -34,7 +40,7 @@ During alert triage and DFIR investigations, analysts need to see the entire exe
 ## 📋 Prerequisites
 
 To render the visual hierarchy, ensure the following search command is available in your Splunk environment:
-* **[pstree Custom Search Command](https://splunkbase.splunk.com/app/5721)** (available via Splunkbase).
+* **[pstree Custom Search Command](https://splunkbase.splunk.com/)** (available via Splunkbase).
 
 ---
 
@@ -42,14 +48,14 @@ To render the visual hierarchy, ensure the following search command is available
 
 All dashboard input tokens are **optional**. When left blank or set to default wildcards (`*`), the dashboard dynamically inspects the full scope within the chosen time window.
 
-| Input Token | UI Input Type | Default | Optional | Description / Example |
+| Input Token | UI Input Type | Default | Optional | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `time` | TimeRangePicker | Last 1 Hours | No | Scopes the forensic timeframe |
-| `host` | Text Box | `*` | Yes | Target endpoint hostname (e.g., `SRV-APP01`, `WKSTN-102`) |
-| `user` | Text Box | `*` | Yes | Target username or domain account (e.g., `CORP\jdoe`) |
-| `process_path` | Text Box | `*` | Yes | Process binary name or full path (matches `Image` / `process_path`) |
-| `ProcessGuid` | Text Box | `*` | Yes | Sysmon unique Process GUID for precise cross-event tracking |
-| `process_id` | Text Box | `*` | Yes | Specific PID filter (matches decimal or hex values) |
+| `host` | Text Box | `*` | Yes | Target endpoint hostname |
+| `user` | Text Box | `*` | Yes | Target username or domain account |
+| `process_path` | Text Box | `*` | Yes | Process binary name or full path |
+| `ProcessGuid` | Text Box | `*` | Yes | Sysmon unique Process GUID |
+| `process_id` | Text Box | `*` | Yes | Specific PID filter |
 
 ---
 
