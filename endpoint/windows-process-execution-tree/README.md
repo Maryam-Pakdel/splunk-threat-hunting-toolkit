@@ -158,5 +158,5 @@ Ensure your dashboard header form contains the following inputs:
    * Set visualization to Table or custom view supported by the `pstree` app.
 
 4. **Verify Field Mappings**:
-   * Confirm that your index/sourcetype matches the queries (adjust `index=* sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"` to your organization's naming convention).
+   * Confirm that your index/sourcetype matches the queries.
 
