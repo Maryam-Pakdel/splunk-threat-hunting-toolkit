@@ -1,0 +1,25 @@
+...
+
+<panel>
+    <title>Process</title>
+    <table>
+        <title>Input(s): Hostname (optional), Process Guid (optional), Image (optional)</title>
+        <search>
+            <query>index=sysmon EventCode=1 host=$TOKEN_HOST$
+    | where match(replace(Image, "\s+", ""), "(?i)" . replace(replace(replace("$TOKEN_PROCESS_PATH$", "\s+", ""), "\*", ".*"), "\\\\", "\\\\\\\\"))
+    | where match(replace(ProcessGuid, "\s+", ""), "(?i)" . replace(replace(replace("$TOKEN_PROCESS_GUID$", "\s+", ""), "\*", ".*"), "\\\\", "\\\\\\\\"))
+    | table Image ProcessGuid
+            </query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+            <set token="tok_proc_guid">$row.ProcessGuid$</set>
+            <eval token="tok_proc_guid">mvindex(split($row.ProcessGuid$,":"),0)</eval>
+        </drilldown>
+    </table>
+</panel>
+
+...
