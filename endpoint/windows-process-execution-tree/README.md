@@ -91,16 +91,9 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
 | **Stage 4** | Child Processes | [`sysmon-child.xml`](./sysmon-child.xml) | `$GAPGPTMASKTOKENvat2frx3tkeX4X$` | None (Downstream) | Surfaces all binaries and commands spawned by the target process. |
 
 ### Drilldown Flow Diagram
-```text
-[sysmon-process.xml]
-│
-▼ (Click row -> sets $GAPGPTMASKTOKENvat2frx3tkeX5X$ [Target GUID])
- ┌──────┴──────────────────────────────────┐
- │                                         │
- ▼                                         ▼
-[sysmon-parent.xml]                 [sysmon-child.xml]
- │                                  (Lists all spawned children)
- ▼ (Click row -> sets $GAPGPTMASKTOKENvat2frx3tkeX6X$ [Parent GUID])
-[sysmon-grand-parent.xml]
-(Shows root ancestor execution)
+```mermaid
+graph TD
+A[sysmon-process.xml] -->|Sets Target GUID| B[sysmon-parent.xml]
+A -->|Sets Target GUID| C[sysmon-child.xml]
+B -->|Sets Parent GUID| D[sysmon-grand-parent.xml]
 
