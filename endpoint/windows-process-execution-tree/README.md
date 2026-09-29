@@ -2,6 +2,17 @@
   <img src="assets/process-tree-mindmap.png" alt="Process Tree Investigation Mindmap" width="800"/>
 </div>
 
+<div align="center">
+
+[![Splunk](https://img.shields.io/badge/Splunk-Enterprise_%7C_Cloud-F15822?logo=splunk&logoColor=white)](#)
+[![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1059_%7C_T1036-red)](#)
+[![Telemetry](https://img.shields.io/badge/Telemetry-Sysmon_EID_1_%7C_Win_4688-0078D4?logo=windows&logoColor=white)](#)
+[![Dashboard](https://img.shields.io/badge/UI-Classic_Dashboard_(Simple_XML)-blue)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+</div>
+
+چ
 # Windows & Sysmon Process Tree Reconstruction & Interactive Lineage Suite (Classic Dashboard SPL)
 
 A production-ready Splunk SPL query and dashboard suite designed for **Classic Dashboards** to reconstruct Parent-Child process execution lineages using both native Windows Security auditing and Sysmon event logs.
