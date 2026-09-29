@@ -1,0 +1,24 @@
+...
+
+<panel>
+    <title>Parent Process</title>
+    <table>
+        <title>Input(s): Hostname (optional)</title>
+        <search>
+            <query>index=sysmon EventCode=1 host=$TOKEN_HOST$ ProcessGuid=$tok_proc_guid$
+    | where match(replace(Image, "\s+", ""), "(?i)" . replace(replace(replace("$TOKEN_PROCESS_PATH$", "\s+", ""), "\*", ".*"), "\\\\", "\\\\\\\\"))
+    | table ParentImage ParentProcessGuid
+            </query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="rowNumbers">true</option>
+        <drilldown>
+            <set token="tok_grand_proc_guid">$row.ParentProcessGuid$</set>
+            <eval token="tok_grand_proc_guid">mvindex(split($row.ParentProcessGuid$,":"),0)</eval>
+        </drilldown>
+    </table>
+</panel>
+
+...
