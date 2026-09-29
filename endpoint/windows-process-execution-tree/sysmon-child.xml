@@ -1,0 +1,19 @@
+...
+
+<panel>
+    <title>Child Process</title>
+    <table>
+        <title>Input(s): Hostname (optional)</title>
+        <search>
+            <query>index=sysmon EventCode=1 host=$TOKEN_HOST$ ParentProcessGuid=$tok_proc_guid$
+    | table Image ProcessGuid
+            </query>
+            <earliest>$time.earliest$</earliest>
+            <latest>$time.latest$</latest>
+        </search>
+        <option name="count">5</option>
+        <option name="rowNumbers">true</option>
+    </table>
+</panel>
+
+...
