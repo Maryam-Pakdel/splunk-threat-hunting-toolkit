@@ -90,10 +90,19 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
 | **Stage 3** | Grand Parent Process | [`sysmon-grand-parent.xml`](./sysmon-grand-parent.xml) | `$GAPGPTMASKTOKENvat2frx3tkeX3X$` | None (Terminal) | Traces root execution ancestor (e.g., service, launcher, shell). |
 | **Stage 4** | Child Processes | [`sysmon-child.xml`](./sysmon-child.xml) | `$GAPGPTMASKTOKENvat2frx3tkeX4X$` | None (Downstream) | Surfaces all binaries and commands spawned by the target process. |
 
-### Drilldown Flow Diagram
-```mermaid
-graph TD
-A[sysmon-process.xml] -->|Sets Target GUID| B[sysmon-parent.xml]
-A -->|Sets Target GUID| C[sysmon-child.xml]
-B -->|Sets Parent GUID| D[sysmon-grand-parent.xml]
+### Investigation Drilldown Flow
+
+1. **Target Identification** (`sysmon-process.xml`):
+   * Analyst identifies and clicks a suspicious process row.
+   * Simple XML sets token `$GAPGPTMASKTOKEN843jicv5stcX0X$` containing the target `ProcessGuid`.
+
+2. **Parallel Lineage Investigation**:
+   * **Upstream Investigation** (`sysmon-parent.xml`): Uses target `ProcessGuid` to locate the direct parent process.
+   * **Downstream Investigation** (`sysmon-child.xml`): Uses target `ProcessGuid` as `ParentProcessGuid` to enumerate all executed child processes.
+
+3. **Root Ancestor Resolution** (`sysmon-grand-parent.xml`):
+   * Clicking a row in the parent panel sets token `$GAPGPTMASKTOKEN843jicv5stcX1X$` with the `ParentProcessGuid`.
+   * Displays the grand parent process to identify the root execution source (e.g., service, shell, or malicious launcher).
+
+
 
