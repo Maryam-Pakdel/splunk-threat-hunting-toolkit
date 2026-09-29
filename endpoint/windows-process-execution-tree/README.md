@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/process-tree-mindmap.png" alt="Process Tree Investigation Mindmap" width="800"/>
+</div>
+
 # Windows & Sysmon Process Tree Reconstruction & Interactive Lineage Suite (Classic Dashboard SPL)
 
 A production-ready Splunk SPL query and dashboard suite designed for **Classic Dashboards** to reconstruct Parent-Child process execution lineages using both native Windows Security auditing and Sysmon event logs.
