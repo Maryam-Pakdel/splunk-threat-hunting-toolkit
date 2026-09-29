@@ -15,7 +15,7 @@ During alert triage and DFIR investigations, analysts need to see the entire exe
 
 ## 📚 Recommended Reading
 For a deeper understanding of the tradecraft, methodology, and the "why" behind process tree analysis, I highly recommend reading:
-* **[Process Hunting with a Process Tree](https://www.splunk.com/en-us/blog/security/process-hunting-with-a-process.html)** - An insightful Splunk blog post that explores the value of process lineage visibility in SOC operations and how it elevates threat hunting capabilities.
+* **[Process Hunting with a Process Tree](https://www.splunk.com/en-us/blog/security/process-hunting-with-a-process.html)** - An insightful Splunk blog post that explores the value of process lineage visibility in SOC operations.
 
 ---
 
@@ -46,16 +46,14 @@ To render the visual hierarchy, ensure the following search command is available
 
 ## 🛠️ Classic Dashboard Input Tokens
 
-All dashboard input tokens are **optional**. When left blank or set to default wildcards (`*`), the dashboard dynamically inspects the full scope within the chosen time window.
+The query utilizes Regex-based matching for its input tokens, allowing for partial matches or wildcard (`*`) searching.
 
-| Input Token | UI Input Type | Default | Optional | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| `time` | TimeRangePicker | Last 1 Hours | No | Scopes the forensic timeframe |
-| `host` | Text Box | `*` | Yes | Target endpoint hostname |
-| `user` | Text Box | `*` | Yes | Target username or domain account |
-| `process_path` | Text Box | `*` | Yes | Process binary name or full path |
-| `ProcessGuid` | Text Box | `*` | Yes | Sysmon unique Process GUID |
-| `process_id` | Text Box | `*` | Yes | Specific PID filter |
+| Input Token | UI Input Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `time` | TimeRangePicker | Last 1 Hours | Scopes the forensic timeframe |
+| `host` | Text Box | `*` | Target endpoint hostname |
+| `TOKEN_PROCESS_PATH` | Text Box | `*` | Regex/Wildcard filter for process path |
+| `TOKEN_PROCESS_ID` | Text Box | `*` | Decimal PID filter (Wildcard support) |
 
 ---
 
@@ -63,12 +61,11 @@ All dashboard input tokens are **optional**. When left blank or set to default w
 
 1. Navigate to **Dashboards** > **Create New Dashboard** in Splunk.
 2. Select **Classic Dashboard (Simple XML)**.
-3. Add the input fields (Time, Text inputs for Host, User, Process Path, ProcessGuid, and PID).
+3. Add the required input fields (Time, Text inputs for Host, Process Path, and PID).
 4. Add a new **Statistics Table** panel.
-5. Paste the contents of [`process_tree.spl`](./process_tree.spl) into the panel search.
-6. Connect the search tokens to your form inputs.
+5. Paste the optimized SPL query into the panel search, ensuring the tokens `$TOKEN_PROCESS_PATH$` and `$TOKEN_PROCESS_ID$` are correctly mapped to your input forms.
 
-> *Note: If running as a standalone ad-hoc search in Search & Reporting, replace tokens like `$host$`, `$user$`, `$process_path$`, `$ProcessGuid$`, and `$process_id$` with wildcards (`*`) or specific forensic artifacts.*
+> *Note: If running as a standalone ad-hoc search in Search & Reporting, replace the tokens directly with `*` or your specific forensic values.*
 
 ---
 
