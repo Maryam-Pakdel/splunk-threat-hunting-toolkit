@@ -107,7 +107,7 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
 * `process_tree.spl`: Primary SPL query for building recursive process trees using Sysmon EventCode 1.
 * `sysmon-process.xml`: Initial triage panel. Filter by host, path, or PID to locate target executions.
@@ -117,7 +117,7 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
 
 ---
 
-## Prerequisites and Dependencies
+## 📋 Prerequisites & Dependencies
 
 * **Splunk Environment**: Designed and tested for Splunk Enterprise using Classic (Simple XML) dashboards.
 * **Add-on for Process Trees**:
@@ -130,7 +130,7 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
 
 ---
 
-## Dashboard Inputs Configuration
+## ⚙️ Dashboard Inputs Configuration
 
 Ensure your dashboard header form contains the following inputs:
 
@@ -142,7 +142,7 @@ Ensure your dashboard header form contains the following inputs:
 
 ---
 
-## Deployment & Setup
+## 🚀 Deployment & Setup
 
 1. **Create Dashboard**:
    * Navigate to **Search & Reporting** -> **Dashboards** -> **Create New Dashboard**.
