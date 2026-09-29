@@ -1,8 +1,8 @@
 (index=windows EventCode=4688) OR (index=sysmon EventCode=1)
-host=APAMLAKTEHRAN61
+host="<TARGET_HOST>"
 parent_process_name!="*splunkd.exe*"
 | where match(replace(process_path, "\s+", ""), "(?i)" . replace(replace(replace("*", "\s+", ""), "\*", ".*"), "\\\\", "\\\\\\\\"))
-| where match(tostring(tonumber(replace(process_id, "\s+", ""), 16)), replace(replace("160356", "\s+", ""), "\*", ".*"))
+| where match(tostring(tonumber(replace(process_id, "\s+", ""), 16)), replace(replace("<TARGET_PID_OR_*>", "\s+", ""), "\*", ".*"))
 | eval ParentImage=parent_process_name,
        Image=process_name,
        ParentProcessId=tonumber(parent_process_id, 16),
