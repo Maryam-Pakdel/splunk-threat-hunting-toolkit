@@ -44,7 +44,7 @@ All dashboard input tokens are **optional**. When left blank or set to default w
 
 | Input Token | UI Input Type | Default | Optional | Description / Example |
 | :--- | :--- | :--- | :--- | :--- |
-| `time` | TimeRangePicker | Last 24 Hours | No | Scopes the forensic timeframe |
+| `time` | TimeRangePicker | Last 1 Hours | No | Scopes the forensic timeframe |
 | `host` | Text Box | `*` | Yes | Target endpoint hostname (e.g., `SRV-APP01`, `WKSTN-102`) |
 | `user` | Text Box | `*` | Yes | Target username or domain account (e.g., `CORP\jdoe`) |
 | `process_path` | Text Box | `*` | Yes | Process binary name or full path (matches `Image` / `process_path`) |
