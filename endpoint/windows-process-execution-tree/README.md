@@ -12,7 +12,7 @@
 
 </div>
 
-چ
+
 # Windows & Sysmon Process Tree Reconstruction & Interactive Lineage Suite (Classic Dashboard SPL)
 
 A production-ready Splunk SPL query and dashboard suite designed for **Classic Dashboards** to reconstruct Parent-Child process execution lineages using both native Windows Security auditing and Sysmon event logs.
