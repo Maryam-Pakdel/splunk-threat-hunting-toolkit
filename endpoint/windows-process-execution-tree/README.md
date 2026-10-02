@@ -135,7 +135,7 @@ The suite includes 4 interactive Simple XML panels that traverse execution hiera
 
 ## 📁 Repository Structure
 
-* `process_tree.spl`: Primary SPL query for building recursive process trees using Sysmon EventCode 1.
+* `process_tree.spl`: Primary SPL query for building recursive process trees using Sysmon EventCode 1 and Windows EventCode 4688.
 * `sysmon-process.xml`: Initial triage panel. Filter by host, path, or PID to locate target executions.
 * `sysmon-parent.xml`: Upstream panel. Resolves direct parent context via clicked target token.
 * `sysmon-grand-parent.xml`: Root discovery panel. Traces ancestry back to initial launcher processes.
